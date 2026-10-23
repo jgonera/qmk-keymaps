@@ -51,9 +51,8 @@ layer.
 
 ## Commands
 
-Run in this directory. The builds run in QMK's Docker image (Docker Desktop
-needs to be running), unless a native `qmk` is on `PATH`, in which case
-that's used.
+The builds run in QMK's Docker image (Docker Desktop needs to be running),
+unless a native `qmk` is on `PATH`, in which case that's used.
 
 ```sh
 make        # build firmware and draw images
@@ -83,20 +82,20 @@ qmk/qmk/qmk`), `qmk flash` can do it from the command line.
 
 Bump `QMK_VERSION` (a [qmk_firmware
 tag](https://github.com/qmk/qmk_firmware/tags)) and `QMK_IMAGE` in the
-`Makefile`, and the container image in `.github/workflows/qmk.yml`. Then run
+`Makefile`, and the container image in `.github/workflows/build.yml`. Then run
 `make`. Check the [QMK changelog](https://docs.qmk.fm/ChangeLog/)
 for breaking changes first.
 
 ## GitHub Actions
 
-`.github/workflows/qmk.yml` runs `make build` and `make draw` on every push or
-pull request that touches `qmk/`. The firmware and images are uploaded as
-artifacts of the run (`firmware` and `images`), which expire after 90 days.
-The run fails if the committed images don't match the layout.
+`.github/workflows/build.yml` runs `make build` and `make draw` on every push
+and pull request. The firmware and images are uploaded as artifacts of the run
+(`firmware` and `images`), which expire after 90 days. The run fails if the
+committed images don't match the layout.
 
-Builds from `master` are also published as
-[releases](https://github.com/jgonera/dotfiles/releases) tagged
-`qmk-<date>-<commit>`, with the firmware and images attached. They're kept
+Builds from `main` are also published as
+[releases](https://github.com/jgonera/qmk-keymaps/releases) tagged
+`<date>-<time>-<commit>`, with the firmware and images attached. They're kept
 forever, so any earlier version of the layout can be flashed again.
 
 ## Differences from the Oryx version
