@@ -14,12 +14,17 @@
 #define BASE 0
 #define SYMB 1
 
+// Escape on tap, toggles Caps Lock when held past TAPPING_TERM (see
+// juliusz.c). LT(0, ...) is just a way to get a tap-hold key with a custom
+// hold action.
+#define ESC_CAPS LT(0, KC_ESC)
+
 // clang-format off
 
 #define LAYER_BASE \
     KC_GRV,           KC_1,             KC_2,             KC_3,             KC_4,             KC_5,             XXXXXXX,              XXXXXXX,          KC_6,             KC_7,             KC_8,             KC_9,             KC_0,             KC_MINS,        \
     KC_TAB,           KC_Q,             KC_W,             KC_E,             KC_R,             KC_T,             XXXXXXX,              XXXXXXX,          KC_Y,             KC_U,             KC_I,             KC_O,             KC_P,             KC_BSLS,        \
-    KC_CAPS,          KC_A,             KC_S,             KC_D,             KC_F,             KC_G,                                                     KC_H,             KC_J,             KC_K,             KC_L,             KC_SCLN,          KC_QUOT,        \
+    ESC_CAPS,         KC_A,             KC_S,             KC_D,             KC_F,             KC_G,                                                     KC_H,             KC_J,             KC_K,             KC_L,             KC_SCLN,          KC_QUOT,        \
     LSFT_T(KC_ESC),   LSFT_T(KC_Z),     LCTL_T(KC_X),     KC_C,             KC_V,             KC_B,             XXXXXXX,              XXXXXXX,          KC_N,             KC_M,             KC_COMM,          RCTL_T(KC_DOT),   RSFT_T(KC_SLSH),  RSFT_T(KC_EQL), \
     XXXXXXX,          KC_LCTL,          XXXXXXX,          LALT_T(KC_ESC),   LGUI_T(KC_ESC),                                                                               KC_RALT,          KC_RGUI,          KC_LBRC,          RCTL_T(KC_RBRC),  XXXXXXX,        \
                                                                                               KC_MPRV,          KC_MNXT,              KC_VOLD,          KC_VOLU,                                                                                                  \

@@ -25,6 +25,8 @@ userspace](https://docs.qmk.fm/newbs_external_userspace).
 - `users/juliusz/wrappers.h`: maps the ErgoDox-shaped layers onto the
   Moonlander and Voyager. See below for how.
 - `users/juliusz/config.h`, `rules.mk`: settings shared by all keyboards.
+- `users/juliusz/juliusz.c`: custom key behavior shared by all keyboards
+  (e.g. Esc/Caps Lock).
 - `keyboards/*/keymaps/juliusz/`: per-keyboard keymaps. They're mostly just
   `KEYMAPS(...)` with the right wrapper, plus keyboard-specific bits (e.g. the
   ErgoDox's layer LEDs and debounce setting).

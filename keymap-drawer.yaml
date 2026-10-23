@@ -3,5 +3,8 @@
 parse_config:
   # Mark both space keys as held on SYMB, not just the first one
   mark_alternate_layer_activators: true
+  raw_binding_map:
+    # ESC_CAPS, see users/juliusz/layout.h
+    "LT(0, KC_ESC)": {t: ESC, h: CAPS}
 draw_config:
   dark_mode: auto
