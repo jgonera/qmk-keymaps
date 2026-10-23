@@ -74,15 +74,17 @@ run with `uvx`.
 ### Flashing
 
 ```sh
-make flash KB=moonlander                  # latest release
-make flash KB=moonlander FIRMWARE=build   # local build/firmware/
+make flash KB=moonlander
 ```
 
 `KB` can be any unique part of a keyboard name in `qmk.json` (`ergodox`,
-`moonlander`, `voyager`). By default this downloads the firmware from the
-[latest release](https://github.com/jgonera/qmk-keymaps/releases/latest), so
-it only needs this repo, `curl` and [zapp](https://github.com/zsa/zapp), ZSA's
-command-line flasher. No QMK or Docker. When zapp says it's waiting, press the
+`moonlander`, `voyager`). It flashes the local build from `build/firmware/` if
+there is one (`make clean` removes it). Otherwise it downloads the firmware
+from the [latest
+release](https://github.com/jgonera/qmk-keymaps/releases/latest), so on
+machines where you only flash it needs just this repo, `curl` and
+[zapp](https://github.com/zsa/zapp), ZSA's command-line flasher. No QMK or
+Docker. It prints which firmware it's flashing. When zapp says it's waiting, press the
 keyboard's reset button.
 
 To get zapp, `brew install zapp`. Where you can't install software, download

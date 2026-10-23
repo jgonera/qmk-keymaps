@@ -27,8 +27,6 @@ endif
 
 REPO := jgonera/qmk-keymaps
 ZAPP ?= zapp
-# release: the latest GitHub release, build: the local build/firmware/
-FIRMWARE ?= release
 
 .PHONY: all setup build draw flash clean
 
@@ -75,8 +73,9 @@ draw: setup
 	done
 
 # Flashes a keyboard with zapp, e.g. make flash KB=moonlander. KB can be any
-# unique part of a keyboard name in qmk.json. Downloads the firmware from the
-# latest release, so it doesn't need QMK or Docker.
+# unique part of a keyboard name in qmk.json. Uses the local build if there is
+# one, otherwise downloads the firmware from the latest release, so it doesn't
+# need QMK or Docker.
 flash:
 	@set -e; \
 	matches=(); \
@@ -93,10 +92,11 @@ flash:
 		exit 1; \
 	}; \
 	name=$${matches[0]//\//_}_$(KEYMAP); \
-	if [ "$(FIRMWARE)" = build ]; then \
-		file=$$(ls build/firmware/$$name.*); \
-		echo "Flashing $$file from the local build"; \
+	file=$$(ls build/firmware/$$name.* 2>/dev/null || true); \
+	if [ -n "$$file" ]; then \
+		echo "Flashing $$file (local build from $$(date -r "$$file" '+%Y-%m-%d %H:%M'))"; \
 	else \
+		echo "No local build in build/firmware/ (run 'make build' to build one), using the latest release"; \
 		tag=$$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/$(REPO)/releases/latest); \
 		tag=$${tag##*/}; \
 		mkdir -p build/release; \
