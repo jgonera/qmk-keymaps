@@ -94,7 +94,11 @@ The Moonlander uses the STM32's built-in DFU bootloader, which
    half with a paperclip. The keyboard stops typing.
 4. Click **Connect** and choose **STM32 BOOTLOADER**.
 5. If asked for an interface, choose the one with **Internal Flash** in its
-   name. Never choose **Option Bytes**; writing there can lock up the chip.
+   name (e.g. `@Internal Flash /0x08000000/…`). Never choose **Option
+   Bytes**: those are the chip's settings, and overwriting them can turn on
+   read/write protection or stop the reset button from entering the
+   bootloader. Undoing that needs `dfu-util` or STM32CubeProgrammer, or in the
+   worst case opening the keyboard and using an ST-Link probe.
 6. Check that **DfuSe Start Address** is `0x08000000` (it's filled in
    automatically).
 7. Under **Firmware Download**, choose the `.bin` file and click
