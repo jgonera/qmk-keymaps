@@ -94,7 +94,7 @@ flash:
 	name=$${matches[0]//\//_}_$(KEYMAP); \
 	file=$$(ls build/firmware/$$name.* 2>/dev/null || true); \
 	if [ -n "$$file" ]; then \
-		echo "Flashing $$file (local build from $$(date -r "$$file" '+%Y-%m-%d %H:%M'))"; \
+		echo "Flashing $$file (local build from $$(date -u -r "$$file" '+%Y-%m-%d %H:%M UTC'))"; \
 	else \
 		echo "No local build in build/firmware/ (run 'make build' to build one), using the latest release"; \
 		tag=$$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/$(REPO)/releases/latest); \
