@@ -721,9 +721,8 @@ path.combo { stroke: #7f7f7f; }
 <rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key trans"/>
 <text x="0" y="0" class="key trans tap">▽</text>
 </g>
-<g transform="translate(644, 350)" class="key trans keypos-71">
-<rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key trans"/>
-<text x="0" y="0" class="key trans tap">▽</text>
+<g transform="translate(644, 350)" class="key held alternate keypos-71">
+<rect rx="6" ry="6" x="-26" y="-40" width="52" height="80" class="key held alternate"/>
 </g>
 </g>
 </g>

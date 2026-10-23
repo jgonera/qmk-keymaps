@@ -1,4 +1,7 @@
 # keymap-drawer settings, see
 # https://github.com/caksoylar/keymap-drawer/blob/main/CONFIGURATION.md
+parse_config:
+  # Mark both space keys as held on SYMB, not just the first one
+  mark_alternate_layer_activators: true
 draw_config:
   dark_mode: auto
