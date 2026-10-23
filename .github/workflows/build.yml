@@ -58,7 +58,8 @@ jobs:
 
       - name: Check that committed images are up to date
         run: |
-          if ! git diff --exit-code -- images; then
+          if [ -n "$(git status --porcelain -- images)" ]; then
+            git status --short -- images
             echo "::error::images/ is out of date. Run 'make draw' and commit the result, or use the images artifact of this run."
             exit 1
           fi

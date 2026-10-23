@@ -12,12 +12,8 @@ SHELL := bash
 QMK_FIRMWARE ?= $(HOME)/.cache/qmk_firmware
 KEYMAP_DRAWER ?= uvx --from keymap-drawer==$(KEYMAP_DRAWER_VERSION) keymap
 
-# name used in file names : QMK keyboard : directory with keymaps/
-KEYBOARDS := \
-	ergodox_ez:ergodox_ez/base:ergodox_ez \
-	moonlander:zsa/moonlander:zsa/moonlander \
-	voyager:zsa/voyager:zsa/voyager
 KEYMAP := juliusz
+KEYBOARDS := $(shell python3 -c 'import json; print(*(kb for kb, _ in json.load(open("qmk.json"))["build_targets"]))')
 
 # Use a native QMK install if there is one (e.g. in CI), Docker otherwise.
 ifeq ($(shell command -v qmk 2>/dev/null),)
@@ -51,12 +47,19 @@ build: setup
 	mkdir -p build/firmware
 	mv -f *.hex *.bin build/firmware/
 
+# Images are named like the firmware files, e.g. zsa_voyager_juliusz.svg.
 draw: setup
+	rm -rf images
 	mkdir -p build images
 	@set -e; \
 	layer_names=$$(sed -nE 's/^.define ([A-Z0-9_]+) [0-9]+$$/\1/p' users/$(KEYMAP)/layout.h); \
-	for kb in $(KEYBOARDS); do \
-		IFS=: read -r name qmk_kb keymaps_dir <<< "$$kb"; \
+	for qmk_kb in $(KEYBOARDS); do \
+		name=$${qmk_kb//\//_}_$(KEYMAP); \
+		keymaps_dir=$$qmk_kb; \
+		until [ -d keyboards/$$keymaps_dir/keymaps/$(KEYMAP) ]; do \
+			[[ $$keymaps_dir == */* ]] || { echo "No keymap for $$qmk_kb" >&2; exit 1; }; \
+			keymaps_dir=$${keymaps_dir%/*}; \
+		done; \
 		echo "Drawing $$name"; \
 		$(QMK_RUN) sh -ec "cpp -P -I users/$(KEYMAP) -DQMK_KEYBOARD_H='\"/dev/null\"' \
 			keyboards/$$keymaps_dir/keymaps/$(KEYMAP)/keymap.c > build/$$name.c; \

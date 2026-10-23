@@ -7,15 +7,15 @@ userspace](https://docs.qmk.fm/newbs_external_userspace).
 
 ## ErgoDox EZ
 
-![ErgoDox EZ layout](images/ergodox_ez.svg)
+![ErgoDox EZ layout](images/ergodox_ez_base_juliusz.svg)
 
 ## Moonlander
 
-![Moonlander layout](images/moonlander.svg)
+![Moonlander layout](images/zsa_moonlander_juliusz.svg)
 
 ## Voyager
 
-![Voyager layout](images/voyager.svg)
+![Voyager layout](images/zsa_voyager_juliusz.svg)
 
 ## Files
 
