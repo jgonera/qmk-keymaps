@@ -95,35 +95,6 @@ runs without installing) and pass it as `ZAPP=~/Downloads/zapp`.
 [Keymapp](https://www.zsa.io/flash) works too: choose the `.bin`/`.hex` file,
 click Flash and press the reset button.
 
-#### Moonlander from Chrome, if running zapp isn't allowed
-
-The Moonlander uses the STM32's built-in DFU bootloader, which
-[webdfu](https://github.com/devanlai/webdfu) can talk to from Chrome or Edge
-(WebUSB). On macOS no driver is needed. This does the same as `dfu-util -a 0
--s 0x08000000:leave`, which is what `qmk flash` runs for the Moonlander.
-
-1. Download `zsa_moonlander_juliusz.bin` from the [latest
-   release](https://github.com/jgonera/qmk-keymaps/releases/latest).
-2. Open https://devanlai.github.io/webdfu/dfu-util/.
-3. Put the keyboard into the bootloader: press the reset button on the left
-   half with a paperclip. The keyboard stops typing.
-4. Click **Connect** and choose **STM32 BOOTLOADER**.
-5. If asked for an interface, choose the one with **Internal Flash** in its
-   name (e.g. `@Internal Flash /0x08000000/…`). Never choose **Option
-   Bytes**: those are the chip's settings, and overwriting them can turn on
-   read/write protection or stop the reset button from entering the
-   bootloader. Undoing that needs `dfu-util` or STM32CubeProgrammer, or in the
-   worst case opening the keyboard and using an ST-Link probe.
-6. Check that **DfuSe Start Address** is `0x08000000` (it's filled in
-   automatically).
-7. Under **Firmware Download**, choose the `.bin` file and click
-   **Download**. When it says "Done!", the keyboard restarts with the new
-   firmware. If it doesn't, unplug it and plug it back in.
-
-The bootloader is in the chip's ROM, so it can't be overwritten: if something
-goes wrong, put the keyboard into the bootloader again and retry. Don't use
-this for the Voyager, whose bootloader is in flash and can be overwritten.
-
 ### Updating QMK
 
 Bump `QMK_VERSION` (a [qmk_firmware
