@@ -1,7 +1,11 @@
 # Builds firmware and draws images for all keyboards listed in qmk.json.
 # See README.md.
 
-QMK_VERSION := 0.34.6
+# ZSA's fork of QMK, which supports the Moonlander rev B (Ignition bootloader)
+# that upstream QMK doesn't. QMK_COMMIT is pinned to the head of QMK_BRANCH.
+QMK_REPO := https://github.com/zsa/qmk_firmware.git
+QMK_BRANCH := firmware25
+QMK_COMMIT := 93b2b9ec3368f86c5eb5a2e3f934049f8daef885
 QMK_IMAGE := ghcr.io/qmk/qmk_cli:1.2.0
 KEYMAP_DRAWER_VERSION := 0.23.0
 
@@ -17,7 +21,7 @@ KEYBOARDS := $(shell python3 -c 'import json; print(*(kb for kb, _ in json.load(
 
 # Use a native QMK install if there is one (e.g. in CI), Docker otherwise.
 ifeq ($(shell command -v qmk 2>/dev/null),)
-QMK_RUN := docker run --rm \
+QMK_RUN := docker run --rm --init \
 	-v "$(QMK_FIRMWARE)":/qmk_firmware -v "$(CURDIR)":/qmk_userspace \
 	-e QMK_HOME=/qmk_firmware -e QMK_USERSPACE=/qmk_userspace \
 	-w /qmk_userspace $(QMK_IMAGE)
@@ -32,16 +36,22 @@ ZAPP ?= zapp
 
 all: build draw
 
-# Clones qmk_firmware at QMK_VERSION into QMK_FIRMWARE, or moves an existing
-# clone to that version. build and draw run it automatically.
+# Checks out QMK_COMMIT of QMK_REPO in QMK_FIRMWARE, cloning it if needed.
+# build and draw run it automatically.
 setup:
-	@if [ ! -d "$(QMK_FIRMWARE)" ]; then \
-		git clone --depth 1 --branch $(QMK_VERSION) --recurse-submodules --shallow-submodules \
-			https://github.com/qmk/qmk_firmware.git "$(QMK_FIRMWARE)"; \
-	elif [ "$$(git -C "$(QMK_FIRMWARE)" describe --tags --exact-match 2>/dev/null)" != "$(QMK_VERSION)" ]; then \
-		git -C "$(QMK_FIRMWARE)" fetch --depth 1 origin tag $(QMK_VERSION) && \
-		git -C "$(QMK_FIRMWARE)" checkout $(QMK_VERSION) && \
-		git -C "$(QMK_FIRMWARE)" submodule update --init --recursive --depth 1; \
+	@set -e; \
+	git_qmk() { git -C "$(QMK_FIRMWARE)" "$$@"; }; \
+	if [ ! -d "$(QMK_FIRMWARE)" ]; then \
+		git init -q "$(QMK_FIRMWARE)"; \
+		git_qmk remote add origin $(QMK_REPO); \
+	fi; \
+	if [ "$$(git_qmk rev-parse HEAD 2>/dev/null)" != "$(QMK_COMMIT)" ]; then \
+		echo "Checking out $(QMK_REPO) $(QMK_BRANCH) at $(QMK_COMMIT)"; \
+		git_qmk remote set-url origin $(QMK_REPO); \
+		git_qmk fetch -q --depth 1 origin $(QMK_COMMIT); \
+		git_qmk -c advice.detachedHead=false checkout -q --force FETCH_HEAD; \
+		git_qmk submodule -q sync --recursive; \
+		git_qmk submodule -q update --init --recursive --depth 1 --force; \
 	fi
 
 build: setup
@@ -51,6 +61,8 @@ build: setup
 	mv -f *.hex *.bin build/firmware/
 
 # Images are named like the firmware files, e.g. zsa_voyager_juliusz.svg.
+# The physical layouts come from qmk info, because keymap-drawer's default
+# (QMK's online API) only has upstream QMK's keyboards.
 draw: setup
 	rm -rf images
 	mkdir -p build images
@@ -66,10 +78,13 @@ draw: setup
 		echo "Drawing $$name"; \
 		$(QMK_RUN) sh -ec "cpp -P -I users/$(KEYMAP) -DQMK_KEYBOARD_H='\"/dev/null\"' \
 			keyboards/$$keymaps_dir/keymaps/$(KEYMAP)/keymap.c > build/$$name.c; \
-			qmk c2json --no-cpp -q -kb $$qmk_kb -km $(KEYMAP) build/$$name.c -o build/$$name.json"; \
+			qmk c2json --no-cpp -q -kb $$qmk_kb -km $(KEYMAP) build/$$name.c -o build/$$name.json; \
+			qmk info -kb $$qmk_kb -f json > build/$$name.info.json"; \
+		layout=$$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["layout"])' build/$$name.json); \
 		$(KEYMAP_DRAWER) -c keymap-drawer.yaml parse -q build/$$name.json \
 			--layer-names $$layer_names > build/$$name.yaml; \
-		$(KEYMAP_DRAWER) -c keymap-drawer.yaml draw build/$$name.yaml > images/$$name.svg; \
+		$(KEYMAP_DRAWER) -c keymap-drawer.yaml draw build/$$name.yaml \
+			-j build/$$name.info.json -l $$layout > images/$$name.svg; \
 	done
 
 # Flashes a keyboard with zapp, e.g. make flash KB=moonlander. KB can be any
