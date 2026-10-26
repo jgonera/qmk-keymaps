@@ -15,6 +15,7 @@ SHELL := bash
 # make clean.
 QMK_FIRMWARE ?= $(HOME)/.cache/qmk_firmware
 KEYMAP_DRAWER ?= uvx --from keymap-drawer==$(KEYMAP_DRAWER_VERSION) keymap
+KEYMAP_DRAWER_PYTHON ?= uvx --from keymap-drawer==$(KEYMAP_DRAWER_VERSION) python
 
 KEYMAP := juliusz
 KEYBOARDS := $(shell python3 -c 'import json; print(*(kb for kb, _ in json.load(open("qmk.json"))["build_targets"]))')
@@ -61,8 +62,9 @@ build: setup
 	mv -f *.hex *.bin build/firmware/
 
 # Images are named like the firmware files, e.g. zsa_voyager_juliusz.svg.
-# The physical layouts come from qmk info, because keymap-drawer's default
-# (QMK's online API) only has upstream QMK's keyboards.
+# Physical layouts: keymap-drawer's own hand-made one if it has one (e.g. the
+# Voyager's, with rotated thumb keys), otherwise qmk info's. keymap-drawer's
+# usual fallback, QMK's online API, only has upstream QMK's keyboards.
 draw: setup
 	rm -rf images
 	mkdir -p build images
@@ -81,10 +83,16 @@ draw: setup
 			qmk c2json --no-cpp -q -kb $$qmk_kb -km $(KEYMAP) build/$$name.c -o build/$$name.json; \
 			qmk info -kb $$qmk_kb -f json > build/$$name.info.json"; \
 		layout=$$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["layout"])' build/$$name.json); \
+		if $(KEYMAP_DRAWER_PYTHON) -c 'import sys; from keymap_drawer.physical_layout import QMK_LAYOUTS_PATH as p; \
+				sys.exit(not (p / (sys.argv[1].replace("/", "@") + ".json")).is_file())' $$qmk_kb; then \
+			physical_layout="-k $$qmk_kb"; \
+		else \
+			physical_layout="-j build/$$name.info.json"; \
+		fi; \
 		$(KEYMAP_DRAWER) -c keymap-drawer.yaml parse -q build/$$name.json \
 			--layer-names $$layer_names > build/$$name.yaml; \
 		$(KEYMAP_DRAWER) -c keymap-drawer.yaml draw build/$$name.yaml \
-			-j build/$$name.info.json -l $$layout > images/$$name.svg; \
+			$$physical_layout -l $$layout > images/$$name.svg; \
 	done
 
 # Flashes a keyboard with zapp, e.g. make flash KB=moonlander. KB can be any
