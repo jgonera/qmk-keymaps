@@ -14,7 +14,7 @@ SHELL := bash
 # A disposable cache, cloned by the setup target when needed and deleted by
 # make clean.
 QMK_FIRMWARE ?= $(HOME)/.cache/qmk_firmware
-KEYMAP_DRAWER ?= uvx --from keymap-drawer==$(KEYMAP_DRAWER_VERSION) keymap
+KEYMAP_DRAWER_PYTHON ?= uvx --from keymap-drawer==$(KEYMAP_DRAWER_VERSION) python
 
 KEYMAP := juliusz
 KEYBOARDS := $(shell python3 -c 'import json; print(*(kb for kb, _ in json.load(open("qmk.json"))["build_targets"]))')
@@ -60,32 +60,10 @@ build: setup
 	mkdir -p build/firmware
 	mv -f *.hex *.bin build/firmware/
 
-# Images are named like the firmware files, e.g. zsa_voyager_juliusz.svg.
-# The physical layouts come from qmk info, because keymap-drawer's default
-# (QMK's online API) only has upstream QMK's keyboards.
+# Draws images/, named like the firmware files (e.g. zsa_voyager_juliusz.svg).
+# See scripts/draw.py.
 draw: setup
-	rm -rf images
-	mkdir -p build images
-	@set -e; \
-	layer_names=$$(sed -nE 's/^.define ([A-Z0-9_]+) [0-9]+$$/\1/p' users/$(KEYMAP)/layout.h); \
-	for qmk_kb in $(KEYBOARDS); do \
-		name=$${qmk_kb//\//_}_$(KEYMAP); \
-		keymaps_dir=$$qmk_kb; \
-		until [ -d keyboards/$$keymaps_dir/keymaps/$(KEYMAP) ]; do \
-			[[ $$keymaps_dir == */* ]] || { echo "No keymap for $$qmk_kb" >&2; exit 1; }; \
-			keymaps_dir=$${keymaps_dir%/*}; \
-		done; \
-		echo "Drawing $$name"; \
-		$(QMK_RUN) sh -ec "cpp -P -I users/$(KEYMAP) -DQMK_KEYBOARD_H='\"/dev/null\"' \
-			keyboards/$$keymaps_dir/keymaps/$(KEYMAP)/keymap.c > build/$$name.c; \
-			qmk c2json --no-cpp -q -kb $$qmk_kb -km $(KEYMAP) build/$$name.c -o build/$$name.json; \
-			qmk info -kb $$qmk_kb -f json > build/$$name.info.json"; \
-		layout=$$(python3 -c 'import json, sys; print(json.load(open(sys.argv[1]))["layout"])' build/$$name.json); \
-		$(KEYMAP_DRAWER) -c keymap-drawer.yaml parse -q build/$$name.json \
-			--layer-names $$layer_names > build/$$name.yaml; \
-		$(KEYMAP_DRAWER) -c keymap-drawer.yaml draw build/$$name.yaml \
-			-j build/$$name.info.json -l $$layout > images/$$name.svg; \
-	done
+	@QMK_RUN='$(QMK_RUN)' KEYMAP=$(KEYMAP) $(KEYMAP_DRAWER_PYTHON) scripts/draw.py
 
 # Flashes a keyboard with zapp, e.g. make flash KB=moonlander. KB can be any
 # unique part of a keyboard name in qmk.json. Uses the local build if there is
