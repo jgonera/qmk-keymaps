@@ -26,7 +26,7 @@ jobs:
 
       - name: Get QMK version
         id: qmk
-        run: echo "version=$(sed -nE 's/^QMK_VERSION := (.+)$/\1/p' Makefile)" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(sed -nE 's/^QMK_COMMIT := (.+)$/\1/p' Makefile)" >> "$GITHUB_OUTPUT"
 
       - name: Cache qmk_firmware
         uses: actions/cache@v4
