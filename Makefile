@@ -25,7 +25,10 @@ else
 QMK_RUN := env QMK_HOME="$(QMK_FIRMWARE)" QMK_USERSPACE="$(CURDIR)"
 endif
 
-.PHONY: all setup build draw clean
+REPO := jgonera/qmk-keymaps
+ZAPP ?= zapp
+
+.PHONY: all setup build draw flash clean
 
 all: build draw
 
@@ -68,6 +71,46 @@ draw: setup
 			--layer-names $$layer_names > build/$$name.yaml; \
 		$(KEYMAP_DRAWER) -c keymap-drawer.yaml draw build/$$name.yaml > images/$$name.svg; \
 	done
+
+# Flashes a keyboard with zapp, e.g. make flash KB=moonlander. KB can be any
+# unique part of a keyboard name in qmk.json. Uses the local build if there is
+# one, otherwise downloads the firmware from the latest release, so it doesn't
+# need QMK or Docker.
+flash:
+	@set -e; \
+	matches=(); \
+	for qmk_kb in $(KEYBOARDS); do \
+		[[ -n "$(KB)" && $$qmk_kb == *"$(KB)"* ]] && matches+=("$$qmk_kb"); \
+	done; \
+	if [ $${#matches[@]} -ne 1 ]; then \
+		echo "Usage: make flash KB=<keyboard>, where <keyboard> matches one of: $(KEYBOARDS)" >&2; \
+		exit 1; \
+	fi; \
+	command -v "$(ZAPP)" >/dev/null || { \
+		echo "zapp not found. Install it (brew install zapp), or download it from" >&2; \
+		echo "https://github.com/zsa/zapp/releases and pass ZAPP=/path/to/zapp." >&2; \
+		exit 1; \
+	}; \
+	name=$${matches[0]//\//_}_$(KEYMAP); \
+	file=$$(ls build/firmware/$$name.* 2>/dev/null || true); \
+	if [ -n "$$file" ]; then \
+		echo "Flashing $$file (local build from $$(date -u -r "$$file" '+%Y-%m-%d %H:%M UTC'))"; \
+	else \
+		echo "No local build in build/firmware/ (run 'make build' to build one), using the latest release"; \
+		tag=$$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/$(REPO)/releases/latest); \
+		tag=$${tag##*/}; \
+		mkdir -p build/release; \
+		for ext in bin hex; do \
+			url=https://github.com/$(REPO)/releases/download/$$tag/$$name.$$ext; \
+			if curl -fsSL -o build/release/$$name.$$ext "$$url" 2>/dev/null; then \
+				file=build/release/$$name.$$ext; \
+				break; \
+			fi; \
+		done; \
+		[ -n "$$file" ] || { echo "No $$name firmware in release $$tag" >&2; exit 1; }; \
+		echo "Flashing $$file from release $$tag"; \
+	fi; \
+	"$(ZAPP)" flash "$$file"
 
 # Also deletes QMK_FIRMWARE, so don't point it at a checkout you care about.
 clean:
