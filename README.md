@@ -46,15 +46,13 @@ change `zsa/moonlander/revb` to `zsa/moonlander/reva` in `qmk.json`.
 ### How the layout maps to other keyboards
 
 - **Moonlander**: same main block. The inner column has three 1u keys, so the
-  ErgoDox's lower inner key (1.5u) moves up one row. The 3 big thumb keys are
-  the ErgoDox's bottom row of the thumb cluster, and the red key gets the
-  middle key of the cluster (Play/Pause on the left, Mute on the right). The
-  top two keys of each thumb cluster (Prev/Next, Vol-/Vol+) are skipped.
+  ErgoDox's lower inner key (1.5u) moves up one row. The 3 thumb keys are the
+  ErgoDox's bottom row of the thumb cluster, and the red key gets the middle
+  key of the cluster. The top two keys of each thumb cluster are skipped.
 - **Voyager**: only the outer 6 columns of the 4 main rows and the 2 big
   thumb keys on each side. The inner column, the bottom row and the rest of
   the thumb cluster are skipped, so on the base layer the Voyager loses LCtrl,
-  LAlt/Esc, LGui/Esc, RAlt, RGui, `[`, `]`, Delete and the media keys, and
-  F11/F12 on the SYMB layer.
+  LAlt/Esc, LGui/Esc, RAlt, RGui, `[` and `]`/RCtrl.
 
 If a key that only exists on the ErgoDox becomes important, move it to a
 position that the smaller keyboards have too, e.g. a free key on the SYMB
