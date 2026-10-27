@@ -51,8 +51,8 @@ change `zsa/moonlander/revb` to `zsa/moonlander/reva` in `qmk.json`.
   key of the cluster. The top two keys of each thumb cluster are skipped.
 - **Voyager**: only the outer 6 columns of the 4 main rows and the 2 big
   thumb keys on each side. The inner column, the bottom row and the rest of
-  the thumb cluster are skipped, so on the base layer the Voyager loses LCtrl,
-  LAlt/Esc, LGui/Esc, RAlt, RGui, `[` and `]`/RCtrl.
+  the thumb cluster are skipped, so on the base layer the Voyager loses Esc/LGui
+  and RAlt (Gui and Alt are still on V/M and C/comma when held).
 
 If a key that only exists on the ErgoDox becomes important, move it to a
 position that the smaller keyboards have too, e.g. a free key on the SYMB
