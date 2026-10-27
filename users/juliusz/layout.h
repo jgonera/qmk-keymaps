@@ -33,7 +33,7 @@
 
 #define LAYER_SYMB \
     _______,          KC_F1,            KC_F2,            KC_F3,            KC_F4,            KC_F5,            _______,              _______,          KC_F6,            KC_F7,            KC_F8,            KC_F9,            KC_F10,           KC_F11,  \
-    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          KC_F12,  \
+    _______,          KC_BRID,          KC_BRIU,          _______,          _______,          _______,          _______,              _______,          KC_MPRV,          KC_MNXT,          KC_MUTE,          KC_VOLD,          KC_VOLU,          KC_F12,  \
     _______,          KC_LCBR,          KC_RCBR,          KC_LPRN,          KC_RPRN,          KC_UNDS,                                                  KC_LEFT,          KC_DOWN,          KC_UP,            KC_RGHT,          KC_UNDS,          _______, \
     _______,          KC_LBRC,          KC_RBRC,          KC_LABK,          KC_RABK,          KC_MINS,          _______,              _______,          KC_HOME,          KC_PGDN,          KC_PGUP,          KC_END,           KC_MINS,          _______, \
     _______,          _______,          _______,          _______,          _______,                                                                                      _______,          _______,          _______,          _______,          _______, \
