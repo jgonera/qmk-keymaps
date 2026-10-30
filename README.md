@@ -58,6 +58,18 @@ If a key that only exists on the ErgoDox becomes important, move it to a
 position that the smaller keyboards have too, e.g. a free key on the SYMB
 layer.
 
+### Lights and sound
+
+- **Key lights** (Moonlander, Voyager): keys that do something on the
+  current layer are white, keys that do nothing (`XXXXXXX`) are off.
+  Brightness is `KEY_LIGHT_LEVEL` (0-255) in `users/juliusz/config.h`. The
+  firmware sets this at every start, so lighting settings saved on the
+  keyboard (e.g. by Oryx) don't matter.
+- **Indicator LEDs**: ZSA's default (active layer, Caps Lock). They're
+  on/off only, with fixed colors.
+- **Sound** is off on the Moonlander (`AUDIO_ENABLE = no`), so it doesn't beep
+  when plugged in.
+
 ## Commands
 
 The builds run in QMK's Docker image (Docker Desktop needs to be running),
