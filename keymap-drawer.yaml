@@ -6,5 +6,9 @@ parse_config:
   raw_binding_map:
     # ESC_CAPS, see users/juliusz/layout.h
     "LT(0, KC_ESC)": {t: ESC, h: CAPS}
+    # LIGHT_DN, LIGHT_UP, LIGHT_LV: key lights dimmer, brighter, type level
+    QK_USER_0: {t: "LED-"}
+    QK_USER_1: {t: "LED+"}
+    QK_USER_2: {t: "LED?"}
 draw_config:
   dark_mode: auto

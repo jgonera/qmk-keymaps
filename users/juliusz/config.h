@@ -3,5 +3,6 @@
 #define PERMISSIVE_HOLD
 #define LAYER_STATE_8BIT
 
-// Brightness of the key lights, 0-255 (see juliusz.c)
-#define KEY_LIGHT_LEVEL 1
+// Starting brightness of the key lights, 0-255, until it's changed with
+// LIGHT_DN/LIGHT_UP (see juliusz.c)
+#define KEY_LIGHT_DEFAULT_LEVEL 16
