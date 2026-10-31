@@ -61,10 +61,15 @@ layer.
 ### Lights and sound
 
 - **Key lights** (Moonlander, Voyager): keys that do something on the
-  current layer are white, keys that do nothing (`XXXXXXX`) are off.
-  Brightness is `KEY_LIGHT_LEVEL` (0-255) in `users/juliusz/config.h`. The
+  current layer are white, keys that do nothing (`XXXXXXX`) are off. The
   firmware sets this at every start, so lighting settings saved on the
   keyboard (e.g. by Oryx) don't matter.
+- **Key light brightness**: SYMB + `LED-`/`LED+` (under F3/F4) step through
+  0, 2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 175 (out of 255; 175 is the
+  Moonlander's maximum). The level is saved on the keyboard. SYMB + `LED?`
+  (under F5) types it, e.g. `key light level: 16`. Until it's changed, it's
+  `KEY_LIGHT_DEFAULT_LEVEL` in `users/juliusz/config.h`. The three keys do
+  nothing on the ErgoDox, which has no key lights.
 - **Indicator LEDs**: ZSA's default (active layer, Caps Lock). They're
   on/off only, with fixed colors.
 - **Sound** is off on the Moonlander (`AUDIO_ENABLE = no`), so it doesn't beep
