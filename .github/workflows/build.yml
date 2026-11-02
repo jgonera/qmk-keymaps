@@ -1,3 +1,6 @@
+# Builds the firmware and images (failing if the committed images are out of
+# date), uploads both as artifacts, and publishes builds from main as releases.
+
 name: Build
 
 on:

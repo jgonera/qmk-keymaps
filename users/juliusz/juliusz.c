@@ -1,3 +1,6 @@
+// Custom key behavior shared by all keyboards: Esc/Caps Lock and the key
+// lights (see layout.h for the keycodes).
+
 #include QMK_KEYBOARD_H
 #include "layout.h"
 

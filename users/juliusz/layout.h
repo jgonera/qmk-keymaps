@@ -3,7 +3,7 @@
 // Layers are written in the shape of the ErgoDox EZ (the order of
 // LAYOUT_ergodox_pretty), the biggest of the supported keyboards. wrappers.h
 // maps them onto the Moonlander and Voyager, skipping the keys they don't
-// have. See ../../README.md for which keys end up where.
+// have. wrappers.h says which keys end up where.
 //
 // To add a layer: give it a number, define LAYER_<NAME> below and add it to
 // KEYMAPS. (Layer numbers are #defines rather than an enum so that the image

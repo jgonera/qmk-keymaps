@@ -1,3 +1,5 @@
+# Build settings shared by all keyboards.
+
 LTO_ENABLE = yes
 CONSOLE_ENABLE = no
 COMMAND_ENABLE = no
