@@ -24,39 +24,6 @@ change `zsa/moonlander/revb` to `zsa/moonlander/reva` in `qmk.json`.
 
 ![Voyager layout](images/zsa_voyager_juliusz.svg)
 
-## How the layout maps to other keyboards
-
-- **Moonlander**: same main block. The inner column has three 1u keys, so the
-  ErgoDox's lower inner key (1.5u) moves up one row. The 3 thumb keys are the
-  ErgoDox's bottom row of the thumb cluster, and the red key gets the middle
-  key of the cluster. The top two keys of each thumb cluster are skipped.
-- **Voyager**: only the outer 6 columns of the 4 main rows and the 2 big
-  thumb keys on each side. The inner column, the bottom row and the rest of
-  the thumb cluster are skipped, so on the base layer the Voyager loses Esc/LGui
-  and RAlt (when held, Gui is still on V and Backspace, Alt on C, M and
-  comma).
-
-If a key that only exists on the ErgoDox becomes important, move it to a
-position that the smaller keyboards have too, e.g. a free key on the SYMB
-layer.
-
-## Lights and sound
-
-- **Key lights** (Moonlander, Voyager): keys that do something on the
-  current layer are white, keys that do nothing (`XXXXXXX`) are off. The
-  firmware sets this at every start, so lighting settings saved on the
-  keyboard (e.g. by Oryx) don't matter.
-- **Key light brightness**: SYMB + `LED-`/`LED+` (under F3/F4) step through
-  0, 2, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 175 (out of 255; 175 is the
-  Moonlander's maximum). The level is saved on the keyboard. SYMB + `LED?`
-  (under F5) types it, e.g. `key light level: 16`. Until it's changed, it's
-  `KEY_LIGHT_DEFAULT_LEVEL` in `users/juliusz/config.h`. The three keys do
-  nothing on the ErgoDox, which has no key lights.
-- **Indicator LEDs**: ZSA's default (active layer, Caps Lock). They're
-  on/off only, with fixed colors.
-- **Sound** is off on the Moonlander (`AUDIO_ENABLE = no`), so it doesn't beep
-  when plugged in.
-
 ## Commands
 
 The builds run in QMK's Docker image (Docker Desktop needs to be running),
