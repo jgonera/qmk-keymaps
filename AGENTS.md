@@ -35,5 +35,7 @@ QMK external userspace built with ZSA's fork (`QMK_REPO`/`QMK_COMMIT` in the
 - New custom keycodes (`QK_USER_n`) need a label in `keymap-drawer.yaml`'s
   `raw_binding_map`, keyed by the expanded name (e.g. `QK_USER_0`).
 - The ErgoDox's flash is small (32 KB); `qmk compile` prints its usage.
+- Avoid generic names for `#define`s: e.g. `FLASH` clashes with the STM32
+  headers on the Moonlander and Voyager.
 - The Moonlander and Voyager builds always show `[WARNINGS]`: it's a harmless
   LTO note (`using serial compilation of 2 LTRANS jobs`).

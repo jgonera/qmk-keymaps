@@ -1,5 +1,5 @@
-// Custom key behavior shared by all keyboards: Esc/Caps Lock and the key
-// lights (see layout.h for the keycodes).
+// Custom key behavior shared by all keyboards: Esc/Caps Lock, FLASH_KEY and
+// the key lights (see layout.h for the keycodes).
 
 #include QMK_KEYBOARD_H
 #include "layout.h"
@@ -63,15 +63,33 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             keypos_t pos     = {.col = col, .row = row};
             uint16_t keycode = keymap_key_to_keycode(layer_switch_get_layer(pos), pos);
             uint8_t  level   = keycode == KC_NO ? 0 : key_light_level;
-            rgb_matrix_set_color(led, level, level, level);
+            if (keycode == FLASH_KEY) {
+                rgb_matrix_set_color(led, level, 0, 0);
+            } else {
+                rgb_matrix_set_color(led, level, level, level);
+            }
         }
     }
     return false;
 }
 #endif
 
+// When FLASH_KEY was pressed, or 0 if it isn't held
+static uint16_t flash_pressed_at = 0;
+
+void housekeeping_task_user(void) {
+    if (flash_pressed_at && timer_elapsed(flash_pressed_at) >= FLASH_HOLD_MS) {
+        flash_pressed_at = 0;
+        reset_keyboard();
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case FLASH_KEY:
+            // | 1 so a press at timer 0 isn't mistaken for "not held"
+            flash_pressed_at = record->event.pressed ? (timer_read() | 1) : 0;
+            return false;
         case ESC_CAPS:
             // Held: toggle Caps Lock instead of momentarily switching to
             // layer 0. Tapped: falls through and sends Escape.

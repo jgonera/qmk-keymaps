@@ -21,7 +21,7 @@ KEYBOARDS := $(shell python3 -c 'import json; print(*(kb for kb, _ in json.load(
 
 # Use a native QMK install if there is one (e.g. in CI), Docker otherwise.
 ifeq ($(shell command -v qmk 2>/dev/null),)
-QMK_RUN := docker run --rm --init \
+QMK_RUN := docker run --rm \
 	-v "$(QMK_FIRMWARE)":/qmk_firmware -v "$(CURDIR)":/qmk_userspace \
 	-e QMK_HOME=/qmk_firmware -e QMK_USERSPACE=/qmk_userspace \
 	-w /qmk_userspace $(QMK_IMAGE)
@@ -54,8 +54,11 @@ setup:
 		git_qmk submodule -q update --init --recursive --depth 1 --force; \
 	fi
 
+# qmk userspace-compile reports failure if .build has failed.log.<its process
+# ID>.* files. In Docker it gets the same ID every run, so logs left by an
+# earlier failed build would fail every later one: delete them first.
 build: setup
-	$(QMK_RUN) qmk userspace-compile
+	$(QMK_RUN) sh -c 'rm -f "$${QMK_HOME:?}"/.build/failed.log.*; qmk userspace-compile'
 	rm -rf build/firmware
 	mkdir -p build/firmware
 	mv -f *.hex *.bin build/firmware/

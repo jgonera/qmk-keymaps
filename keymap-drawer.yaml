@@ -10,5 +10,7 @@ parse_config:
     QK_USER_0: {t: "LED-"}
     QK_USER_1: {t: "LED+"}
     QK_USER_2: {t: "LED?"}
+    # FLASH_KEY: hold to restart into the bootloader
+    QK_USER_3: {t: FLASH, h: hold}
 draw_config:
   dark_mode: auto

@@ -58,7 +58,9 @@ release](https://github.com/jgonera/qmk-keymaps/releases/latest), so on
 machines where you only flash it needs just this repo, `curl` and
 [zapp](https://github.com/zsa/zapp), ZSA's command-line flasher. No QMK or
 Docker. It prints which firmware it's flashing. When zapp says it's waiting,
-press the keyboard's reset button.
+hold SYMB + `FLASH` (top left) for a second, or press the keyboard's reset
+button. If you enter the bootloader by accident, unplug and replug the
+keyboard: the firmware is still there.
 
 To get zapp, `brew install zapp`. Where you can't install software, download
 the macOS binary from [zapp's
