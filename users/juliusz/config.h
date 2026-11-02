@@ -1,3 +1,5 @@
+// Settings shared by all keyboards.
+
 #pragma once
 
 #define PERMISSIVE_HOLD
