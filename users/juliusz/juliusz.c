@@ -1,5 +1,5 @@
-// Custom key behavior shared by all keyboards: Esc/Caps Lock, FLASH_KEY and
-// the key lights (see layout.h for the keycodes).
+// Custom key behavior shared by all keyboards: Esc/Caps Lock, Gui/Backspace,
+// FLASH_KEY and the key lights (see layout.h for the keycodes).
 
 #include QMK_KEYBOARD_H
 #include "layout.h"
@@ -74,10 +74,23 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 }
 #endif
 
+// GUI_BSPC after QMK has decided it's held rather than tapped
+static enum {
+    GUI_BSPC_IDLE,
+    GUI_BSPC_UNDECIDED, // held alone, not yet for GUI_BSPC_REPEAT_MS
+    GUI_BSPC_GUI,
+    GUI_BSPC_BACKSPACE,
+} gui_bspc_state = GUI_BSPC_IDLE;
+static uint16_t gui_bspc_pressed_at;
+
 // When FLASH_KEY was pressed, or 0 if it isn't held
 static uint16_t flash_pressed_at = 0;
 
 void housekeeping_task_user(void) {
+    if (gui_bspc_state == GUI_BSPC_UNDECIDED && timer_elapsed(gui_bspc_pressed_at) >= GUI_BSPC_REPEAT_MS) {
+        gui_bspc_state = GUI_BSPC_BACKSPACE;
+        register_code(KC_BSPC);
+    }
     if (flash_pressed_at && timer_elapsed(flash_pressed_at) >= FLASH_HOLD_MS) {
         flash_pressed_at = 0;
         reset_keyboard();
@@ -85,7 +98,44 @@ void housekeeping_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // Another key pressed while GUI_BSPC is held alone: it's Gui after all
+    if (gui_bspc_state == GUI_BSPC_UNDECIDED && record->event.pressed && keycode != GUI_BSPC) {
+        gui_bspc_state = GUI_BSPC_GUI;
+        register_mods(MOD_BIT(KC_LGUI));
+    }
+
     switch (keycode) {
+        case GUI_BSPC:
+            // Taps are plain Backspace, handled by QMK (including tap then
+            // hold for a repeating Backspace)
+            if (record->tap.count) break;
+            if (record->event.pressed) {
+                gui_bspc_pressed_at = record->event.time;
+                if (timer_elapsed(record->event.time) < TAPPING_TERM) {
+                    // Decided before TAPPING_TERM: another key was pressed and
+                    // released while holding it (Permissive Hold)
+                    gui_bspc_state = GUI_BSPC_GUI;
+                    register_mods(MOD_BIT(KC_LGUI));
+                } else {
+                    gui_bspc_state = GUI_BSPC_UNDECIDED;
+                }
+            } else {
+                switch (gui_bspc_state) {
+                    case GUI_BSPC_GUI:
+                        unregister_mods(MOD_BIT(KC_LGUI));
+                        break;
+                    case GUI_BSPC_BACKSPACE:
+                        unregister_code(KC_BSPC);
+                        break;
+                    case GUI_BSPC_UNDECIDED:
+                        tap_code(KC_BSPC);
+                        break;
+                    case GUI_BSPC_IDLE:
+                        break;
+                }
+                gui_bspc_state = GUI_BSPC_IDLE;
+            }
+            return false;
         case FLASH_KEY:
             // | 1 so a press at timer 0 isn't mistaken for "not held"
             flash_pressed_at = record->event.pressed ? (timer_read() | 1) : 0;

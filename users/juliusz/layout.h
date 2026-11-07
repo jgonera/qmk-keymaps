@@ -19,6 +19,12 @@
 // hold action.
 #define ESC_CAPS LT(0, KC_ESC)
 
+// Backspace on tap; Gui when held together with another key; a held
+// (repeating) Backspace when held alone for GUI_BSPC_REPEAT_MS (see
+// juliusz.c). Gui is never sent on its own, which Karabiner would turn into
+// Escape.
+#define GUI_BSPC LT(0, KC_BSPC)
+
 // Key lights (see juliusz.c): dimmer, brighter, type the current level
 #define LIGHT_DN QK_USER_0
 #define LIGHT_UP QK_USER_1
@@ -38,7 +44,7 @@
     XXXXXXX,          XXXXXXX,          XXXXXXX,          XXXXXXX,          LGUI_T(KC_ESC),                                                                               KC_RALT,          XXXXXXX,          XXXXXXX,          XXXXXXX,          XXXXXXX,        \
                                                                                               XXXXXXX,          XXXXXXX,              XXXXXXX,          XXXXXXX,                                                                                                  \
                                                                                                                 XXXXXXX,              XXXXXXX,                                                                                                                    \
-                                                                            LT(SYMB, KC_SPC), LGUI_T(KC_BSPC),  XXXXXXX,              XXXXXXX,          KC_ENT,           LT(SYMB, KC_SPC)
+                                                                            LT(SYMB, KC_SPC), GUI_BSPC,         XXXXXXX,              XXXXXXX,          KC_ENT,           LT(SYMB, KC_SPC)
 
 #define LAYER_SYMB \
     FLASH_KEY,        KC_F1,            KC_F2,            KC_F3,            KC_F4,            KC_F5,            _______,              _______,          KC_F6,            KC_F7,            KC_F8,            KC_F9,            KC_F10,           KC_F11,  \
