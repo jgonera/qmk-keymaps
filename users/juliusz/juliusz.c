@@ -89,7 +89,7 @@ static bool     gui_bspc_used_as_gui; // another key was pressed while held
 static uint16_t flash_pressed_at = 0;
 
 void housekeeping_task_user(void) {
-    if (gui_bspc_state == GUI_BSPC_GUI && !gui_bspc_used_as_gui && timer_elapsed(gui_bspc_pressed_at) >= GUI_BSPC_REPEAT_MS) {
+    if (gui_bspc_state == GUI_BSPC_GUI && !gui_bspc_used_as_gui && timer_elapsed(gui_bspc_pressed_at) >= GUI_BSPC_REPEAT_DELAY_MS) {
         gui_bspc_state = GUI_BSPC_REPEATING;
         unregister_mods(MOD_BIT(KC_LGUI));
         tap_code(KC_BSPC);

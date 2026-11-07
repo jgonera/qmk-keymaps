@@ -15,5 +15,5 @@
 // GUI_BSPC held alone this long switches from Gui to repeating Backspace,
 // one every GUI_BSPC_REPEAT_INTERVAL_MS (30 matches macOS's fastest key
 // repeat, KeyRepeat 2)
-#define GUI_BSPC_REPEAT_MS 500
+#define GUI_BSPC_REPEAT_DELAY_MS 500
 #define GUI_BSPC_REPEAT_INTERVAL_MS 30
