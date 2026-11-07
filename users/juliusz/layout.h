@@ -19,10 +19,8 @@
 // hold action.
 #define ESC_CAPS LT(0, KC_ESC)
 
-// Backspace on tap; Gui when held together with another key; a held
-// (repeating) Backspace when held alone for GUI_BSPC_REPEAT_MS (see
-// juliusz.c). Gui is never sent on its own, which Karabiner would turn into
-// Escape.
+// Backspace on tap, Gui when held. Held alone for GUI_BSPC_REPEAT_MS, it
+// switches to repeating Backspace (see juliusz.c).
 #define GUI_BSPC LT(0, KC_BSPC)
 
 // Key lights (see juliusz.c): dimmer, brighter, type the current level
