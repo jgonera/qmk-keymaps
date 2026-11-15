@@ -104,6 +104,20 @@ void housekeeping_task_user(void) {
     }
 }
 
+// Z and / are Shift as soon as another key is pressed while they're held,
+// so a capital typed quickly still works if Shift is released before the
+// letter. The cost: fast rolls starting with Z or / (e.g. "/a" in a path)
+// can become capitals. Other mod-taps keep Permissive Hold.
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_Z):
+        case RSFT_T(KC_SLSH):
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // Another key pressed while GUI_BSPC is held: it stays Gui (e.g. Cmd+Tab
     // held), or a repeating Backspace stops, like a normal held key's repeat

@@ -3,6 +3,9 @@
 #pragma once
 
 #define PERMISSIVE_HOLD
+// For the Shift keys on Z and / only, see get_hold_on_other_key_press in
+// juliusz.c
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define LAYER_STATE_8BIT
 
 // Starting brightness of the key lights, 0-255, until it's changed with
