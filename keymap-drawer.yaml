@@ -8,10 +8,6 @@ parse_config:
     "LT(0, KC_ESC)": {t: ESC, h: CAPS}
     # GUI_BSPC, see users/juliusz/layout.h
     "LT(0, KC_BSPC)": {t: BSPC, h: LGUI}
-    # LIGHT_DN, LIGHT_UP, LIGHT_LV: key lights dimmer, brighter, type level
-    QK_USER_0: {t: "LED-"}
-    QK_USER_1: {t: "LED+"}
-    QK_USER_2: {t: "LED?"}
     # FLASH_KEY: hold to restart into the bootloader
     QK_USER_3: {t: FLASH, h: hold}
 draw_config:
