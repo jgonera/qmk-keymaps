@@ -8,12 +8,8 @@
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 #define LAYER_STATE_8BIT
 
-// Starting brightness of the key lights, 0-255, until it's changed with
-// LIGHT_DN/LIGHT_UP (see juliusz.c)
-#define KEY_LIGHT_DEFAULT_LEVEL 16
-
-// How long FLASH has to be held to restart into the bootloader
-#define FLASH_HOLD_MS 1000
+// How long FLASH_KEY has to be held to restart into the bootloader
+#define FLASH_HOLD_MS 3000
 
 // GUI_BSPC held alone this long switches from Gui to repeating Backspace,
 // one every GUI_BSPC_REPEAT_INTERVAL_MS (30 matches macOS's fastest key
