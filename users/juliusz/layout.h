@@ -12,7 +12,11 @@
 #pragma once
 
 #define BASE 0
-#define SYMB 1
+// Toggled with TG(GUISPC) on SYMB: left Space is Gui when held instead of
+// SYMB. Everything else is see-through to BASE. It's below SYMB so SYMB (on
+// right Space) still works on top of it.
+#define GUISPC 1
+#define SYMB 2
 
 // Escape on tap, toggles Caps Lock when held past TAPPING_TERM (see
 // juliusz.c). LT(0, ...) is just a way to get a tap-hold key with a custom
@@ -39,9 +43,19 @@
                                                                                                                 XXXXXXX,              XXXXXXX,                                                                                                                    \
                                                                             LT(SYMB, KC_SPC), GUI_BSPC,         XXXXXXX,              XXXXXXX,          KC_ENT,           LT(SYMB, KC_SPC)
 
+#define LAYER_GUISPC \
+    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,          _______,                                                  _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,                                                                                      _______,          _______,          _______,          _______,          _______, \
+                                                                                              _______,          _______,              _______,          _______,                                                                                           \
+                                                                                                                _______,              _______,                                                                                                             \
+                                                                            LGUI_T(KC_SPC),   _______,          _______,              _______,          _______,          _______
+
 #define LAYER_SYMB \
     FLASH_KEY,        KC_F1,            KC_F2,            KC_F3,            KC_F4,            KC_F5,            _______,              _______,          KC_F6,            KC_F7,            KC_F8,            KC_F9,            KC_F10,           KC_F11,  \
-    _______,          KC_BRID,          KC_BRIU,          _______,          _______,          _______,          _______,              _______,          KC_MPRV,          KC_MNXT,          KC_MUTE,          KC_VOLD,          KC_VOLU,          KC_F12,  \
+    TG(GUISPC),       KC_BRID,          KC_BRIU,          _______,          _______,          _______,          _______,              _______,          KC_MPRV,          KC_MNXT,          KC_MUTE,          KC_VOLD,          KC_VOLU,          KC_F12,  \
     _______,          KC_LCBR,          KC_RCBR,          KC_LPRN,          KC_RPRN,          KC_UNDS,                                                  KC_LEFT,          KC_DOWN,          KC_UP,            KC_RGHT,          KC_UNDS,          KC_ENT,  \
     _______,          KC_LBRC,          KC_RBRC,          KC_LABK,          KC_RABK,          KC_MINS,          _______,              _______,          KC_HOME,          KC_PGDN,          KC_PGUP,          KC_END,           KC_MINS,          _______, \
     _______,          _______,          _______,          _______,          _______,                                                                                      _______,          _______,          _______,          _______,          _______, \
@@ -51,6 +65,7 @@
 
 // clang-format on
 
-#define KEYMAPS(layout)            \
-    [BASE] = layout(LAYER_BASE), \
-    [SYMB] = layout(LAYER_SYMB)
+#define KEYMAPS(layout)              \
+    [BASE]   = layout(LAYER_BASE),   \
+    [GUISPC] = layout(LAYER_GUISPC), \
+    [SYMB]   = layout(LAYER_SYMB)
