@@ -9,6 +9,8 @@ parse_config:
     # LALT_LABK, LGUI_RABK, see users/juliusz/layout.h
     "LALT_T(KC_COMM)": {t: "<", h: LALT}
     "LGUI_T(KC_DOT)": {t: ">", h: LGUI}
+    # DASH_TOGGLE: switches SYMB_DASH on/off
+    QK_USER_0: {t: "_→-", h: toggle}
     # FLASH_KEY: hold to restart into the bootloader
     QK_USER_3: {t: FLASH, h: hold}
 draw_config:

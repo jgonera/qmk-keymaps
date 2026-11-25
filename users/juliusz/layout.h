@@ -13,6 +13,9 @@
 
 #define BASE 0
 #define SYMB 1
+// SYMB with - instead of _ and = instead of -. Turned on together with SYMB
+// while DASH_TOGGLE is on (see juliusz.c); everything else is see-through.
+#define SYMB_DASH 2
 
 // Escape on tap, toggles Caps Lock when held past TAPPING_TERM (see
 // juliusz.c). LT(0, ...) is just a way to get a tap-hold key with a custom
@@ -28,6 +31,9 @@
 // juliusz.c), so it can't be triggered by brushing it
 #define FLASH_KEY QK_USER_3
 
+// Switches SYMB_DASH on or off (saved on the keyboard, see juliusz.c)
+#define DASH_TOGGLE QK_USER_0
+
 // clang-format off
 
 #define LAYER_BASE \
@@ -42,7 +48,7 @@
 
 #define LAYER_SYMB \
     FLASH_KEY,        KC_F1,            KC_F2,            KC_F3,            KC_F4,            KC_F5,            _______,              _______,          KC_F6,            KC_F7,            KC_F8,            KC_F9,            KC_F10,           KC_F11,  \
-    _______,          KC_BRID,          KC_BRIU,          _______,          _______,          _______,          _______,              _______,          KC_MPRV,          KC_MNXT,          KC_MUTE,          KC_VOLD,          KC_VOLU,          KC_F12,  \
+    DASH_TOGGLE,      KC_BRID,          KC_BRIU,          _______,          _______,          _______,          _______,              _______,          KC_MPRV,          KC_MNXT,          KC_MUTE,          KC_VOLD,          KC_VOLU,          KC_F12,  \
     _______,          KC_LCBR,          KC_RCBR,          KC_LPRN,          KC_RPRN,          KC_UNDS,                                                  KC_LEFT,          KC_DOWN,          KC_UP,            KC_RGHT,          KC_UNDS,          KC_ENT,  \
     _______,          LSFT_T(KC_LBRC),  LCTL_T(KC_RBRC),  LALT_LABK,        LGUI_RABK,        KC_MINS,          _______,              _______,          KC_HOME,          RALT_T(KC_PGDN),  RALT_T(KC_PGUP),  RCTL_T(KC_END),   RSFT_T(KC_MINS),  _______, \
     _______,          _______,          _______,          _______,          _______,                                                                                      _______,          _______,          _______,          _______,          _______, \
@@ -50,8 +56,19 @@
                                                                                                                 _______,              _______,                                                                                                             \
                                                                             _______,          KC_DEL,           _______,              _______,          _______,          _______
 
+#define LAYER_SYMB_DASH \
+    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,          _______,          _______,              _______,          _______,          _______,          _______,          _______,          _______,          _______, \
+    _______,          _______,          _______,          _______,          _______,          KC_MINS,                                                  _______,          _______,          _______,          _______,          KC_MINS,          _______, \
+    _______,          _______,          _______,          _______,          _______,          KC_EQL,           _______,              _______,          _______,          _______,          _______,          _______,          RSFT_T(KC_EQL),   _______, \
+    _______,          _______,          _______,          _______,          _______,                                                                                      _______,          _______,          _______,          _______,          _______, \
+                                                                                              _______,          _______,              _______,          _______,                                                                                           \
+                                                                                                                _______,              _______,                                                                                                             \
+                                                                            _______,          _______,          _______,              _______,          _______,          _______
+
 // clang-format on
 
-#define KEYMAPS(layout)            \
-    [BASE] = layout(LAYER_BASE), \
-    [SYMB] = layout(LAYER_SYMB)
+#define KEYMAPS(layout)                    \
+    [BASE]      = layout(LAYER_BASE),      \
+    [SYMB]      = layout(LAYER_SYMB),      \
+    [SYMB_DASH] = layout(LAYER_SYMB_DASH)
