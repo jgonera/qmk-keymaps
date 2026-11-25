@@ -6,8 +6,9 @@ parse_config:
   raw_binding_map:
     # ESC_CAPS, see users/juliusz/layout.h
     "LT(0, KC_ESC)": {t: ESC, h: CAPS}
-    # GUI_BSPC, see users/juliusz/layout.h
-    "LT(0, KC_BSPC)": {t: BSPC, h: LGUI}
+    # LALT_LABK, LGUI_RABK, see users/juliusz/layout.h
+    "LALT_T(KC_COMM)": {t: "<", h: LALT}
+    "LGUI_T(KC_DOT)": {t: ">", h: LGUI}
     # FLASH_KEY: hold to restart into the bootloader
     QK_USER_3: {t: FLASH, h: hold}
 draw_config:
