@@ -7,7 +7,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 // Show the active layer on the three right-hand LEDs (same as Oryx).
-layer_state_t layer_state_set_user(layer_state_t state) {
+layer_state_t layer_state_set_keymap(layer_state_t state) {
     ergodox_board_led_off();
     ergodox_right_led_1_off();
     ergodox_right_led_2_off();
@@ -45,6 +45,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-void keyboard_post_init_user(void) {
-    layer_state_set_user(layer_state);
+void keyboard_post_init_keymap(void) {
+    layer_state_set_keymap(layer_state);
 }
